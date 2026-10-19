@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>DepressionKG · 公开文本研究工作台</title>
+  <link rel="stylesheet" href="./style.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">跳到主要内容</a>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="工作台导航">
+      <a class="brand" href="#materials"><span class="brand-symbol" aria-hidden="true">D<span>·</span></span><span>DepressionKG<small>循证研究工作台</small></span></a>
+      <p class="nav-heading">研究空间</p>
+      <nav class="main-nav" aria-label="主要页面">
+        <button type="button" data-view="materials" class="nav-item is-current" aria-current="page"><span class="nav-icon" aria-hidden="true">⌕</span>问题与材料</button>
+        <button type="button" data-view="answers" class="nav-item"><span class="nav-icon" aria-hidden="true">↔</span>历史回答</button>
+        <button type="button" data-view="feedback" class="nav-item"><span class="nav-icon" aria-hidden="true">☷</span>改进清单<span id="feedback-count" class="nav-count" hidden></span></button>
+      </nav>
+      <div class="sidebar-note"><span class="small-dot" aria-hidden="true"></span><p>研究候选<br><span>临床资格尚未评估</span></p></div>
+      <a class="archive-link" href="#materials">返回研究材料 <span aria-hidden="true">↗</span></a>
+    </aside>
+
+    <main id="main-content" class="main-content" tabindex="-1">
+      <header class="page-header"><div><p class="eyebrow">LOCAL RESEARCH</p><h1 id="page-title">从问题出发，回到原文。</h1><p id="page-description" class="page-description">查找已有材料，核对它能说明什么，再记录尚未解决的问题。</p></div><span id="library-summary" class="local-label">正在载入公开文本…</span></header>
+      <section class="browser-storage-note" aria-label="本浏览器保存范围"><div><strong>仅此浏览器保存；不上传网站；换设备不自动同步。</strong><p>请在一个标签页中使用，并定期导出备份。记录链只核对保存内容的一致性，不认证记录来源。</p><p id="storage-status" role="status" aria-live="polite">正在核对本浏览器记录…</p></div><button id="export-records" class="button quiet" type="button">导出我的记录 JSON</button></section>
+      <section id="export-panel" class="panel export-panel" aria-labelledby="export-heading" hidden>
+        <div class="section-top"><h2 id="export-heading">备份当前浏览器记录</h2><button id="close-export" type="button" class="text-button">关闭备份文本</button></div>
+        <p>下面与下载文件使用同一份完整 JSON。下载被拦时，可以全选后手动复制保存；请自行确认文件或文本已保存。内容没有上传网站。</p>
+        <label class="sr-only" for="export-json">可手动复制的完整 JSON 备份</label><textarea id="export-json" class="export-json" rows="8" readonly spellcheck="false" wrap="off"></textarea>
+        <div class="export-actions"><a id="download-records" class="button quiet">下载 JSON 文件</a><button id="select-export" type="button" class="button quiet">全选 JSON，手动复制</button></div>
+        <p id="export-status" class="inline-status" role="status" aria-live="polite"></p>
+      </section>
+      <div id="app-status" class="app-status" role="status" aria-live="polite"></div>
+
+      <section id="materials-view" aria-label="问题与材料">
+        <div class="workspace-grid">
+          <div class="workspace-primary">
+            <section class="panel question-panel" aria-labelledby="question-heading">
+              <div class="section-top"><h2 id="question-heading">想核查什么？</h2><span class="quiet-label">本浏览器检索</span></div>
+              <form id="question-form">
+                <label class="sr-only" for="question-input">输入研究问题</label>
+                <textarea id="question-input" name="question" rows="3" maxlength="2000" placeholder="例如：情绪低落持续两周，还需要核查症状频率和日常功能的哪些信息？" required disabled></textarea>
+                <div class="question-actions"><details class="strategy-options"><summary>检索方式</summary><label for="strategy-select">当前检索方式</label><select id="strategy-select" name="strategy"><option value="browser_local_lexical_v1">浏览器词项检索（新策略）</option></select><p>与本地全文索引不同；未建立质量改善。</p></details><button id="search-submit" class="button primary" type="submit" disabled><span>查找材料</span><span aria-hidden="true">→</span></button></div>
+              </form>
+              <details id="example-details" class="example-details"><summary>从一个研究问题开始</summary><div id="example-list" class="example-list"></div></details>
+              <details id="recent-search-details" class="example-details" hidden><summary>最近的查找</summary><div id="recent-search-list" class="example-list"></div></details>
+            </section>
+            <section id="search-content" class="search-content" aria-live="polite" aria-busy="false">
+              <div id="search-intro" class="intro-card"><span class="intro-symbol" aria-hidden="true">↗</span><h2>先找到材料，再检查依据。</h2><p>检索会返回现有来源中的真实片段。选中片段后，可以连同上下文阅读；找到材料并不等于答案已经采用它。</p></div>
+              <div id="search-results" hidden></div>
+            </section>
+            <div class="capability-note"><span class="note-symbol" aria-hidden="true">○</span><p><strong>找材料已可使用，新答案尚未启用。</strong><br>本公开候选只含4份可分发文本及完整D1历史例子。浏览器检索是新策略，不等同本地全文索引，尚未通过质量比较；不生成模型回答。</p></div>
+          </div>
+          <aside id="search-reader" class="panel reader-panel" aria-label="检索材料原文"><div class="reader-heading"><p class="eyebrow">READ THE SOURCE</p><h2>原文与上下文</h2></div><div class="reader-empty"><span aria-hidden="true">“</span><p>选择一个检索片段，<br>在这里读它前后的原文。</p></div></aside>
+        </div>
+      </section>
+
+      <section id="answers-view" aria-label="历史回答核查" hidden>
+        <div class="history-toolbar panel"><div><label for="case-select">选择已有研究问题</label><select id="case-select" disabled><option value="">正在读取历史记录…</option></select></div><p>核查真实保存的候选回答；这些回答尚未完整通过。</p></div>
+        <div id="answer-empty" class="panel state-card" hidden></div>
+        <div id="answer-workspace" class="workspace-grid" hidden>
+          <article class="panel answer-panel" aria-labelledby="answer-heading"><div class="section-top"><h2 id="answer-heading">历史候选回答</h2><span class="quiet-label">原记录</span></div><p id="answer-question" class="answer-question"></p><p class="helper">点击标记的回答片段，核对对应原文；原文中的标记也可以带你回到这句话。</p><div id="answer-text" class="answer-text" aria-label="历史回答正文"></div><div class="section-top binding-heading"><h3>逐条核对引用</h3><span id="binding-count" class="quiet-label"></span></div><div id="binding-list" class="binding-list"></div><details id="unresolved-details" class="unresolved-details" hidden><summary>原回答保留的未决问题</summary><ul id="unresolved-list"></ul></details><button class="button quiet add-general-feedback" type="button">记录这份回答的问题</button></article>
+          <aside id="answer-reader" class="panel reader-panel" aria-label="回答引用的原文"><div class="reader-heading"><p class="eyebrow">CHECK THE EVIDENCE</p><h2>回答与原文对照</h2></div><div class="reader-empty"><span aria-hidden="true">↔</span><p>选择一句回答或一条引用，<br>检查它标记的全部内容是否有据。</p></div></aside>
+        </div>
+      </section>
+
+      <section id="feedback-view" aria-label="改进清单" hidden>
+        <div class="feedback-toolbar"><div><h2>把发现的问题留下来。</h2><p>问题和处理记录只保存在当前浏览器，原回答与原文不会被改写。</p></div><button id="new-feedback" class="button primary" type="button">＋ 记录问题</button></div>
+        <div class="feedback-filters" role="group" aria-label="筛选处理状态"><button type="button" data-filter="all" class="filter-button is-current" aria-pressed="true">全部</button><button type="button" data-filter="active" class="filter-button" aria-pressed="false">待处理</button><button type="button" data-filter="resolved" class="filter-button" aria-pressed="false">已处理</button><button id="refresh-feedback" class="text-button" type="button">刷新清单</button></div>
+        <div id="feedback-status" class="inline-status" role="status" aria-live="polite"></div><div id="feedback-list" class="feedback-list"></div>
+      </section>
+      <footer class="page-footer"><span>材料、回答与问题，分别保留。</span><span>不会向网站上传问题或反馈。</span></footer>
+    </main>
+  </div>
+
+  <dialog id="feedback-dialog" class="feedback-dialog" aria-labelledby="feedback-dialog-title">
+    <div class="dialog-heading"><div><p class="eyebrow">KEEP A NOTE</p><h2 id="feedback-dialog-title">记录所见的问题</h2></div><button id="close-feedback" class="icon-button" type="button" aria-label="关闭问题记录">×</button></div>
+    <form id="feedback-form"><p id="feedback-anchor" class="feedback-anchor" hidden></p><label for="feedback-title">问题标题</label><input id="feedback-title" name="title" type="text" maxlength="160" placeholder="简要写下需要改进的地方" required><label for="feedback-category">问题类型</label><select id="feedback-category" name="category"><option value="retrieval">检索材料</option><option value="source">原文内容</option><option value="binding">回答与引用</option><option value="experience">使用体验</option><option value="other">其他</option></select><label for="feedback-description">补充说明 <span class="optional">可选</span></label><textarea id="feedback-description" name="description" rows="4" maxlength="4000" placeholder="发生了什么？你希望核查或改进什么？"></textarea><p id="feedback-save-status" class="inline-status" role="status" aria-live="polite"></p><div class="dialog-actions"><button id="cancel-feedback" class="button quiet" type="button">取消</button><button id="save-feedback" class="button primary" type="submit">保存到本浏览器</button></div></form>
+  </dialog>
+</body>
+</html>
