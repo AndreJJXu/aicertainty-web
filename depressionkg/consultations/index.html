@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer"><meta name="color-scheme" content="light">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'none'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>逐轮记录 · DepressionKG</title>
+  <link rel="stylesheet" href="./style.css"><script type="module" src="./app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">跳到会话</a>
+  <header class="header"><a class="brand" href="../"><span class="symbol">D<span>·</span></span><span>DepressionKG<small>逐轮研究记录</small></span></a><nav aria-label="导航"><a href="../">文献工作台</a><a href="./usage.html">使用说明</a></nav></header>
+  <div class="intro"><div><p class="eyebrow">KEEP THE ORIGINAL WORDS</p><h1>先留下原话，再核查判断。</h1><p>按轮记录、冻结当前信息，保留每一次观察的边界。</p></div><span class="qualification">研究候选<br>临床资格未评估</span></div>
+  <section class="notice" aria-label="使用范围"><p><strong>内容留在此浏览器，不上传网站。</strong> 本页没有模型回答或诊断，冻结后仍等待真实模型。</p><p id="transport-notice">可导出备份；换设备或清除浏览器数据后不会自动恢复。建议只录入匿名研究信息。</p></section>
+  <p id="status" class="status" role="status" aria-live="polite">正在核对浏览器记录…</p>
+  <section id="backup-panel" class="panel backup" hidden><div class="section-heading"><h2>备份当前记录</h2><button id="close-backup" class="quiet" type="button">关闭</button></div><p class="muted">可下载，也可全选复制到本机文件。请自行确认已保存；这里没有上传。</p><label for="backup-text">完整备份文本</label><textarea id="backup-text" rows="7" readonly spellcheck="false" wrap="off"></textarea><div class="actions"><a id="download" class="button quiet">下载 JSON</a><button id="select-backup" class="quiet" type="button">全选，手动复制</button></div></section>
+  <div class="layout">
+    <aside class="sidebar panel" aria-label="会话与备份"><div class="section-heading"><h2>我的会话</h2><button id="refresh" class="quiet" type="button">刷新</button></div>
+      <form id="create-form"><label for="title">新会话标题 <small>可选</small></label><input id="title" placeholder="避免填写姓名等身份信息" autocomplete="off"><button type="submit" data-write disabled>新建会话</button></form>
+      <div id="sessions" class="sessions"></div>
+      <div class="backup-tools"><button id="export" class="quiet" type="button" disabled>导出／复制备份</button><details><summary>恢复已有备份</summary><p class="muted small">只接受本站原话与节点记录。不能导入评估或答案；不会覆盖不同或更早的历史。</p><form id="import-form"><label for="import-file">选择 JSON 文件</label><input id="import-file" type="file" accept=".json,application/json"><label for="import-text">或粘贴完整备份</label><textarea id="import-text" rows="4" spellcheck="false"></textarea><button type="submit" data-write disabled>核对并恢复</button></form></details><button id="sample" class="text-button" type="button" data-write disabled>载入合成示例</button><p class="muted small">示例完全构造，不是真人数据，也不提供诊断。</p></div>
+    </aside>
+    <main id="main" tabindex="-1"><section id="empty" class="panel empty"><span aria-hidden="true">“</span><h2>从一条原话开始。</h2><p>新建会话后，按实际顺序追加患者或询问者原话。每次冻结都保留当时的信息；后续新增内容不会改写旧节点。</p></section>
+      <div id="session" hidden><section class="panel session-heading"><div><h2 id="session-title"></h2><p id="session-meta" class="muted small"></p></div><span id="session-status" class="badge"></span></section>
+        <section class="panel"><div class="section-heading"><h2>逐轮原话</h2><span id="turn-count" class="muted small"></span></div><div id="turns" class="turns"></div><form id="turn-form"><div class="role-row"><label for="role">说话者</label><select id="role"><option value="patient">患者</option><option value="interviewer">询问者</option></select></div><label for="turn-text">追加原话 <small>最多 8000 个 Unicode 字符，保留原字和空白</small></label><textarea id="turn-text" rows="4" required autocomplete="off" placeholder="在这里录入这一轮原话"></textarea><div class="actions"><span id="text-count" class="muted small">0 / 8000</span><button type="submit" data-write disabled>追加这一轮</button></div></form></section>
+        <section class="panel"><h2>冻结当前信息</h2><p class="muted">保存当前可见轮次与问题，形成独立节点。没有启动模型，也不会自动补写问题或答案。</p><form id="freeze-form"><label for="question">想核查的问题 <small>可选</small></label><textarea id="question" rows="2" placeholder="例如：目前哪些信息仍不清楚？"></textarea><button type="submit" data-write disabled>冻结当前节点</button></form></section>
+      </div>
+    </main>
+    <aside id="node-panel" class="panel node-panel" aria-label="冻结节点"><div class="section-heading"><h2>冻结节点</h2><span class="small muted">只保留，不改写</span></div><label for="node-select">选择当时的信息</label><select id="node-select" disabled><option value="">尚无节点</option></select><div id="node-content" class="node-content"><p class="muted">选定会话并冻结后，在这里查看原样信息。尚无实际模型评估。</p></div></aside>
+  </div>
+  <footer>原话不等于诊断事实。当前只提供记录与冻结；模型理解、证据判断和补问能力尚未启用。</footer>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<title>逐轮询诊 · 使用说明</title>
+<style>body{max-width:760px;margin:40px auto;padding:0 22px 64px;background:#f7f8f5;color:#20372e;font:17px/1.85 system-ui,sans-serif}a{color:#17654c}h1{line-height:1.3;font-size:32px}h2{font-size:22px;margin-top:32px}li{margin-bottom:14px}.note{background:#fff;border:1px solid #d6e0d7;border-radius:16px;padding:20px}small{color:#54675d}</style>
+<nav><a href="./">← 返回逐轮询诊</a> · <a href="../">文献工作台</a></nav>
+<h1>保存原话，冻结当前信息。</h1>
+<p>这页帮助你准备并检查询诊过程的研究记录。当前外网版可以记录、冻结和备份；真实模型评估与自动补问尚未启用。</p>
+<ol>
+<li><strong>新建会话。</strong>使用匿名案例编号作为标题。也可以显式载入完全构造的示例，先试操作。</li>
+<li><strong>按原顺序追加原话。</strong>区分“患者”和“询问者”，每轮最多 8000 个 Unicode 字符。正文、换行和空白原样保存；保存后的轮次不会被直接改写。</li>
+<li><strong>冻结当前信息。</strong>填写本轮研究问题，形成这一刻的观察节点。页面显示“等待真实模型”，不表示已产生诊断或下一问。</li>
+<li><strong>继续补充、比较历史。</strong>新增原话后，旧节点会标为历史；重新冻结才能得到覆盖最新信息的节点。可随时查看各节点当时可见的原话。</li>
+<li><strong>导出备份。</strong>下载 JSON，或全选完整 JSON 文本手动复制保存。请确认备份确实保存成功。换设备时，在本页导入这份浏览器版备份；系统会校验完整记录并保留事件先后。</li>
+</ol>
+<div class="note"><strong>记录保存在当前浏览器。</strong>页面自身不会把填写的会话或备份发送给网站或模型；网站没有会话服务器、账号同步或自动模型调用。清理浏览器存储、切换浏览器或更换 HTTP／HTTPS 地址会影响记录的可见性，请先导出。</div>
+<h2>当前版本的边界</h2>
+<p>当前站点的 HTTPS 证书尚未配置正确，使用现有 HTTP 地址访问。HTTP 页面加载可能被网络修改；请仅使用匿名、非敏感研究记录，不填写真实身份或敏感病情。浏览器本地保存不等同于安全医疗档案。</p>
+<p>浏览器备份和本机研究运行时采用不同的载体，不直接互相导入。公开页面只接受自己的记录备份；不能把外部粘贴的评估、答案或自报状态导入为实际模型产物。哈希核对记录一致性，不认证作者身份或医学正确性。</p>
+<p>现有文献工作台仍提供四份公开许可文字、239 个原块及一份 D1 历史候选。查询材料与保存询诊记录是两个操作，当前没有自动将检索结果送入新的模型回答。</p>
+<p><small>2026-10-23 · 外网询诊浏览器版 001 · research_candidate · 临床资格 not_evaluated</small></p>
+</html>
