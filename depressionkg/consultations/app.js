@@ -25,7 +25,7 @@ async function commit(next){
   try{app.snapshot=await store.commitDatabase(app.database,app.snapshot,next);changes?.postMessage({kind:'records-changed'});render();}
   catch(error){if(error.code==='storage_conflict')app.stale=true;throw error;}
 }
-function turnCard(turn){const card=element('article','','turn '+turn.role);card.append(element('p',`第 ${turn.ordinal} 轮 · ${turn.role==='patient'?'患者':'询问者'}`,'turn-label'),element('p',turn.text,'original'));return card;}
+function turnCard(turn){const card=element('article','','turn '+turn.role);card.append(element('p',`第 ${turn.ordinal} 轮 · ${turn.role==='patient'?'受访者':'提问者'}`,'turn-label'),element('p',turn.text,'original'));return card;}
 function render(){
   $('sessions').replaceChildren();
   if(!app.snapshot){$('empty').hidden=false;$('session').hidden=true;$('node-content').replaceChildren(element('p',app.blocked?'原记录未被覆盖。导出原件后，可按使用说明处理。':'尚未打开浏览器记录。','muted'));$('node-select').disabled=true;controls();return;}
@@ -75,7 +75,7 @@ $('import-form').addEventListener('submit',event=>{event.preventDefault();task(a
   if(file&&pasted.trim())throw Error('请选择文件或粘贴文本中的一种，避免恢复错记录。');if(file&&file.size>store.MAX_BYTES)throw Error('备份超过4MiB容量。');
   const raw=file?await file.text():pasted;const imported=store.parseBackup(raw);await commit(imported);app.sessionId=null;app.nodeId=null;$('import-text').value='';$('import-file').value='';render();message('已按顺序与哈希核对并恢复原话及节点；未接收任何模型评估或答案。');});});
 $('sample').addEventListener('click',()=>task(async()=>{const id=uid('pcs');let next=store.createSession(app.snapshot.store,{session_id:id,title:'合成示例 · 完全构造'},meta());
-  for(const [role,text]of [['patient','合成示例：这是操作演示的构造文字。我想先记录最近的作息变化。'],['interviewer','合成示例：这是构造的询问者原话。你想从哪一项变化开始记录？']]){const current=store.sessionDetail(next,id);next=store.addTurn(next,id,{expected_head:current.head_sha256,turn_id:uid('pct'),role,text},meta());}
+  for(const [role,text]of [['patient','合成示例：这是操作演示的构造文字。我想先记录最近的作息变化。'],['interviewer','合成示例：这是构造的提问者原话。你想从哪一项变化开始记录？']]){const current=store.sessionDetail(next,id);next=store.addTurn(next,id,{expected_head:current.head_sha256,turn_id:uid('pct'),role,text},meta());}
   const current=store.sessionDetail(next,id),checkpointId=uid('pcp');next=store.freezeCheckpoint(next,id,{expected_head:current.head_sha256,checkpoint_id:checkpointId,question:'合成示例：查看当前有哪些原话，哪些信息还未提供。'},meta());
   await commit(next);app.sessionId=id;app.nodeId=checkpointId;render();message('合成示例已保存。内容完全构造，不是真人记录、诊断或模型回答。');}));
 if(location.protocol==='http:')$('transport-notice').textContent='当前站点使用 HTTP，建议仅保存匿名研究记录。内容留在此浏览器，可导出备份。';

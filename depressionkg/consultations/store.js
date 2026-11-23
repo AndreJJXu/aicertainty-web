@@ -62,7 +62,7 @@ export function createStore(storeId) {id(storeId,'pcstore');const initial=base({
 function turnIdentity(turns) {return hash(turns.map(t=>({id:t.id,ordinal:t.ordinal,role:t.role,text_sha256:t.text_sha256,text_codepoints:t.text_codepoints,text_utf8_bytes:t.text_utf8_bytes})));}
 function makeCheckpoint(session,checkpointId,question,createdAt) {
   id(checkpointId,'pcp');text(question,2000,'问题');
-  if(!session.turns.some(t=>t.role==='patient'))fail('empty','先追加一轮患者原话，再冻结当前信息。');
+  if(!session.turns.some(t=>t.role==='patient'))fail('empty','先追加一轮受访者原话，再冻结当前信息。');
   const known=[],turnMap=[];let cpCursor=0,byteCursor=0;
   for(const [index,t]of session.turns.entries()) {
     const lead=t.role+': ',line=lead+t.text;known.push(line);
@@ -101,7 +101,7 @@ function replay(store) {
       if(p.expected_head!==session.head_sha256)fail('head_conflict','会话已变化，请刷新后再保存。');
       if(event.kind==='turn_added') {
         id(p.turn_id,'pct');if(identities.has(p.turn_id))fail('duplicate','原话编号重复。');identities.add(p.turn_id);
-        if(!['patient','interviewer'].includes(p.role))fail('role','只接受患者或询问者原话，不接受上传的助手答案。');
+        if(!['patient','interviewer'].includes(p.role))fail('role','只接受受访者或提问者原话，不接受上传的助手答案。');
         text(p.text,8000,'原话');if(session.turns.length>=200||session.turns.reduce((n,t)=>n+t.text_utf8_bytes,0)+bytes(p.text)>128000)fail('turn_limit','当前会话容量已满，请保留并导出原记录。');
         session.turns.push({id:p.turn_id,ordinal:session.turns.length+1,role:p.role,text:p.text,text_sha256:sha256(p.text),text_codepoints:cp(p.text).length,text_utf8_bytes:bytes(p.text),created_at:event.created_at});
       } else {
